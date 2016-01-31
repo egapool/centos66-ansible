@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  vars_files:
+    - group_vars/local/main.yml
+  pre_tasks:
+    - name: Install libselinux-python
+      yum: name=libselinux-python state=present
+
+    - name: Permissive selinux
+      selinux: policy=targeted state=permissive
+
+  roles: 
+    - roles/geerlingguy.apache

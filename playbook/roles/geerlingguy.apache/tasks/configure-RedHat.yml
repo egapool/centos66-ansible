@@ -1,0 +1,38 @@
+---
+- name: apacheの実行ユーザーを変更
+  lineinfile:
+    dest: "{{ apache_server_root }}/conf/{{ apache_daemon }}.conf"
+    regexp: "^User [a-z]+$"
+    line: "User {{apache_user}}"
+  notify: restart apache
+
+- name: apacheの実行グループを変更
+  lineinfile:
+    dest: "{{ apache_server_root }}/conf/{{ apache_daemon }}.conf"
+    regexp: "^Group [a-z]+$"
+    line: "Group {{apache_group}}"
+  notify: restart apache
+
+- name: Configure Apache.
+  lineinfile:
+    dest: "{{ apache_server_root }}/conf/{{ apache_daemon }}.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items: apache_ports_configuration_items
+  notify: restart apache
+
+- name: Check whether certificates defined in vhosts exist.
+  stat: path={{ item.certificate_file }}
+  register: apache_ssl_certificates
+  with_items: apache_vhosts_ssl
+
+- name: Add apache vhosts configuration.
+  template:
+    src: "vhosts-{{ apache_vhosts_version }}.conf.j2"
+    dest: "{{ apache_conf_path }}/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+  when: apache_create_vhosts

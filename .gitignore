@@ -1,0 +1,8 @@
+/.vagrant
+/playbook/group_vars/localhost/*.yml
+/public_html/*
+
+!.gitkeep
+
+# OSX
+/.DS_Store
