@@ -12,4 +12,4 @@
       selinux: policy=targeted state=permissive
 
   roles: 
-    - roles/geerlingguy.apache
+    - geerlingguy.apache
