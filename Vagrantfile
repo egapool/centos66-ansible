@@ -55,7 +55,7 @@ Vagrant.configure(2) do |config|
   # information on available options.
 
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook        = "/vagrant/ansible/local-playbook.yml"
+    ansible.playbook        = "/vagrant/ansible/site.yml"
     ansible.verbose         = true
     ansible.install         = true
     ansible.limit           = "all" # or only "nodes" group, etc.
