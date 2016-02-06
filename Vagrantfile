@@ -54,6 +54,10 @@ Vagrant.configure(2) do |config|
   # View the documentation for the provider you are using for more
   # information on available options.
 
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box 
+  end
+
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook        = "/vagrant/ansible/site.yml"
     ansible.verbose         = true
