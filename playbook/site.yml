@@ -4,6 +4,7 @@
   become: yes
   vars_files:
     - group_vars/localhost/main.yml
+
   pre_tasks:
     - name: Install libselinux-python
       yum: name=libselinux-python state=present
@@ -12,4 +13,5 @@
       selinux: policy=targeted state=permissive
 
   roles: 
-    - geerlingguy.apache
+    - { role: repositries }
+    - { role: geerlingguy.apache, apache_vhosts_version: "2.4" }
