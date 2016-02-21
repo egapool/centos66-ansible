@@ -8,11 +8,15 @@
     - http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
     - https://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm
 
+- name: リポジトリの追加(epel-httpd24)
+  get_url: url="https://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo" dest=/etc/yum.repos.d
+
 # 明示的に指定したいのでenabledは全て0にする
 - name: サードパーティ製リポジトリの設定のenabledを全て0にする
   replace: dest=/etc/yum.repos.d/{{item}} regexp="enabled *= *1" replace="enabled=0"
   with_items:
     - epel.repo
+    - epel-httpd24.repo
     - rpmforge.repo
     - remi.repo
     - ius.repo
