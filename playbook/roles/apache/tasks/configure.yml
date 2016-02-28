@@ -1,0 +1,56 @@
+---
+- name: Apacheの実行ユーザーを変更
+  lineinfile:
+    dest: "/etc/httpd/conf/httpd.conf"
+    regexp: "^User [a-z]+$"
+    line: "User {{apache_user}}"
+  notify: apacheを再起動
+
+- name: Apacheの実行グループを変更
+  lineinfile:
+    dest: "/etc/httpd/conf/httpd.conf"
+    regexp: "^Group [a-z]+$"
+    line: "Group {{apache_group}}"
+  notify: apacheを再起動
+
+- name: Apacheの設定ファイルを変更
+  lineinfile:
+    dest: "/etc/httpd/conf/httpd.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - {
+        regexp: "^Listen ",
+        line: "Listen {{ apache_listen_port }}"
+      }
+  notify: apacheを再起動
+
+- name: Check whether certificates defined in vhosts exist.
+  stat: "path={{apache_ssl_path}}/{{item.servername}}/server.crt"
+  register: apache_ssl_certificates
+  with_items: apache_vhosts_ssl
+
+- name: vhostを設置
+  template:
+    src: "vhosts.conf.j2"
+    dest: "/etc/httpd/conf.d/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: apacheを再起動
+  when: apache_create_vhosts
+
+- name: ssl.confを上書き
+  template:
+    src: "ssl-conf.j2"
+    dest: "/etc/httpd/conf.d/ssl.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: apacheを再起動
+
+
+
+
+

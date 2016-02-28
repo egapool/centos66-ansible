@@ -1,0 +1,22 @@
+---
+# Setup/install tasks.
+- name: Apacheをインストール(httpd24-httpd,httpd24-httpd-devel,httpd24-mod_ssl,openssl)
+  yum:
+    name: "{{ item }}"
+    state: installed
+    enablerepo: "{{ apache_enablerepo }}"
+  with_items: apache_packages
+
+- name: /opt/rh/httpd24/root/etc/httpd に/etc/httpd/のシンボリックリンクを貼る
+  file: src=/opt/rh/httpd24/root/etc/httpd dest=/etc/httpd state=link
+
+- include: ssl.yml
+
+# Configure Apache.
+- include: configure.yml
+
+- name: httpdのchkconfigをONにする
+  service:
+    name: "httpd24-httpd"
+    state: "{{ apache_state }}"
+    enabled: yes

@@ -1,5 +1,10 @@
 ---
-apache_enablerepo: ""
+apache_enablerepo: "epel-httpd24"
+apache_packages:
+  - httpd24-httpd
+  - httpd24-httpd-devel
+  - httpd24-mod_ssl
+  - openssl
 
 apache_listen_port: 80
 apache_listen_port_ssl: 443
@@ -7,20 +12,20 @@ apache_listen_port_ssl: 443
 apache_user: "vagrant"
 apache_group: "vagrant"
 
+# vhostsファイルを生成するかどうか
 apache_create_vhosts: true
+# vhostsファイル名
 apache_vhosts_filename: "vhosts.conf"
-
-# On Debian/Ubuntu, a default virtualhost is included in Apache's configuration.
-# Set this to `true` to remove that default.
-apache_remove_default_vhost: false
 
 apache_global_vhost_settings: |
   DirectoryIndex index.php index.html
 
-apache_vhosts:
+apache_vhosts: []
   # Additional properties: 'serveradmin, serveralias, extra_parameters'.
-  - servername: "local.dev"
-    documentroot: "/var/www/html"
+  # - servername: "local.dev"
+    # documentroot: "/var/www/html"
+
+apache_ssl_path: "/etc/httpd/conf/ssl.key"
 
 apache_vhosts_ssl: []
   # Additional properties: 'serveradmin, extra_parameters'.

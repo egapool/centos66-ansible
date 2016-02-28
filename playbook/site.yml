@@ -14,4 +14,8 @@
 
   roles: 
     - { role: repositries }
-    - { role: geerlingguy.apache, apache_vhosts_version: "2.4" }
+    - role: apache
+      apache_vhosts_ssl:
+        - {servername: "local.example.com", documentroot: "/home/vagrant/public_html/example/public"}
+        - {servername: "local.egapool.com", documentroot: "/home/vagrant/public_html/egapool/public"}
+        - {servername: "local.hogehoge.com", documentroot: "/home/vagrant/public_html/hogehoge/public"}

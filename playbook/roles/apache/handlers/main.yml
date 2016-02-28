@@ -1,0 +1,5 @@
+---
+- name: apacheを再起動
+  service:
+    name: "httpd24-httpd"
+    state: restarted
