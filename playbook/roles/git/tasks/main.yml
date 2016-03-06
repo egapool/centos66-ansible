@@ -1,0 +1,16 @@
+---
+- name: 依存ライブラリインストール
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items: git_dependencies
+
+- name: gitのソースをダウンロード
+  get_url: url="https://www.kernel.org/pub/software/scm/git/git-{{git_version}}.tar.gz" dest="{{git_download_dir}}/git-{{git_version}}.tar.gz"
+
+- name: tarの解凍
+  unarchive: src="{{git_download_dir}}/git-{{git_version}}.tar.gz" dest="{{git_download_dir}}/"
+
+- name: インストール
+  shell: "cd {{git_download_dir}}/git-{{git_version}} && make prefix=/usr/local all && make prefix=/usr/local install"
+  sudo: yes

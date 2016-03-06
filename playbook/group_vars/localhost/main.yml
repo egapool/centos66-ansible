@@ -1,2 +1,0 @@
-apache_vhosts:
-  - {servername: "local.example.com", documentroot: "/home/vagrant/public_html/example/public"}

@@ -1,10 +1,7 @@
 ---
 - hosts: localhost
   connection: local
-  become: yes
-  vars_files:
-    - group_vars/localhost/main.yml
-
+  become: no
   pre_tasks:
     - name: Install libselinux-python
       yum: name=libselinux-python state=present
@@ -19,3 +16,4 @@
         - {servername: "local.example.com", documentroot: "/home/vagrant/public_html/example/public"}
         - {servername: "local.egapool.com", documentroot: "/home/vagrant/public_html/egapool/public"}
         - {servername: "local.hogehoge.com", documentroot: "/home/vagrant/public_html/hogehoge/public"}
+    - role: git
