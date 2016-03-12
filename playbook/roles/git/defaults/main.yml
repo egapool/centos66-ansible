@@ -2,6 +2,7 @@
 git_version: "2.7.2"
 
 git_dependencies:
+  - gcc 
   - curl-devel 
   - expat-devel 
   - gettext-devel 
