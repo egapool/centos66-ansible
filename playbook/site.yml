@@ -10,10 +10,10 @@
       selinux: policy=targeted state=permissive
 
   roles: 
-    - { role: repositries }
+    - role: repositries
     - role: apache
       apache_vhosts_ssl:
-        - {servername: "local.example.com", documentroot: "/home/vagrant/public_html/example/public"}
-        - {servername: "local.egapool.com", documentroot: "/home/vagrant/public_html/egapool/public"}
-        - {servername: "local.hogehoge.com", documentroot: "/home/vagrant/public_html/hogehoge/public"}
+        - {servername: "local.example.com", documentroot: "/var/www/html/example/public"}
+        # - {servername: "local.egapool.com", documentroot: "/var/www/html/egapool/public"}
+        # - {servername: "local.hogehoge.com", documentroot: "/var/www/html/hogehoge/public"}
     - role: git

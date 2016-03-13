@@ -10,6 +10,8 @@
 - name: /opt/rh/httpd24/root/etc/httpd に/etc/httpd/のシンボリックリンクを貼る
   file: src=/opt/rh/httpd24/root/etc/httpd dest=/etc/httpd state=link
 
+- file: src=/opt/rh/httpd24/root/var/log/httpd dest=/var/log/httpd state=link
+
 - include: ssl.yml
 
 # Configure Apache.

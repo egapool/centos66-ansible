@@ -9,8 +9,11 @@ apache_packages:
 apache_listen_port: 80
 apache_listen_port_ssl: 443
 
-apache_user: "vagrant"
-apache_group: "vagrant"
+apache_user: "apache"
+apache_group: "apache"
+
+# fastcgiからphpを利用するかどうか
+apache_php_fpm: true
 
 # vhostsファイルを生成するかどうか
 apache_create_vhosts: true
