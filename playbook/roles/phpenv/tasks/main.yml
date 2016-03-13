@@ -1,0 +1,78 @@
+---
+- name: phpenvのインストール
+- shell: curl -L https://raw.github.com/CHH/phpenv/master/bin/phpenv-install.sh | bash
+
+- name: bashファイルの追記
+- lineinfile:
+    dest: "/root/.bashrc"
+    line: "PATH=$HOME/.phpenv/bin:$PATH # Add phpenv to PATH for scripting"
+
+- lineinfile:
+    dest: "/root/.bashrc"
+    line: eval "$(phpenv init -)"
+
+- shell: source /root/.bashrc
+
+- name: php-buildをプラグインとしてインストール
+- file: path=/root/.phpenv/plugins state=directory
+
+- command: git clone git://github.com/php-build/php-build.git chdir=/root/.phpenv/plugins
+
+- name: php依存パッケージをインストール
+- yum:
+    name: "{{ item }}"
+    state: installed
+  with_items: 
+   - bison 
+   - libxml2 
+   - libxml2-devel 
+   - libxslt-devel 
+   - libtidy-devel 
+   - readline-devel 
+   - libpng 
+   - libpng-devel 
+   - libjpeg 
+   - libjpeg-devel
+
+- name: re2cはrpmforgeから
+- yum:
+    name: re2c
+    state: installed
+    enablerepo: "rpmforge"
+
+- name: libmcryptはepelから
+- yum:
+    name: "{{ item }}"
+    state: installed
+    enablerepo: "epel"
+  with_items: 
+   - libmcrypt
+   - libmcrypt-devel
+
+- name: PHPをインストール
+  command: phpenv install {{ php_version }}
+
+# shインストール
+# bashrc書き込み
+# bisonインストール sudo yum install -y bison
+
+# re2c インストール sudo yum -y install --enablerepo=rpmforge re2c
+
+# sudo yum install -y libxml2.x86_64 libxml2-devel.x86_64
+# yum install -y libjpeg libjpeg-devel 
+# yum install -y libpng libpng-devel
+# sudo yum -y install --enablerepo=epel libmcrypt-devel libmcrypt
+# sudo yum install -y readline-devel
+# sudo yum install -y libtidy-devel
+# sudo yum install -y libxslt-devel
+
+
+
+# yum install -y bison libxml2 libxml2-devel libxslt-devel libtidy-devel readline-devel libpng libpng-devel libjpeg libjpeg-devel 
+
+
+# yum install -y --enablerepo=epel php56-php-cli php56-php-fpm php56-php-pdo php56-php-mbstring php56-php-mysqlnd php56-php-mcrypt php56-php-gd php56-php-opcache php56-php-devel
+
+
+# yum -y install --enablerepo=epel libmcrypt-devel libmcrypt
+# yum install -y --enablerepo=remi-php56 php-cli php-fpm php-pdo php-mysqlnd php-mbstring php-gd php-mcrypt php-opcache php-devel
