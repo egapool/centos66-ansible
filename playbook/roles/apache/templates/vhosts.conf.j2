@@ -15,10 +15,11 @@
   ServerAdmin {{ vhost.serveradmin }}
 {% endif %}
 {% if apache_php_fpm %}
-<FilesMatch \.php$>
+  DirectoryIndex  index.php index.html
+  <FilesMatch \.php$>
     SetHandler application/x-httpd-php
-</FilesMatch>
-ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000{{ vhost.documentroot }}/$1
+   </FilesMatch>
+  ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000{{ vhost.documentroot }}/$1
 {% endif %}
 {% if vhost.documentroot is defined %}
   <Directory "{{ vhost.documentroot }}">
@@ -61,6 +62,7 @@ ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000{{ vhost.documentroot }}/
   ServerAdmin {{ vhost.serveradmin }}
 {% endif %}
 {% if apache_php_fpm %}
+  DirectoryIndex  index.php index.html
   <FilesMatch \.php$>
     SetHandler application/x-httpd-php
   </FilesMatch>

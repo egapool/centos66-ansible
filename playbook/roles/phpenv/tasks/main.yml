@@ -1,25 +1,36 @@
 ---
+- name: secure_pathに/usr/local/binを追加
+  lineinfile: dest=/etc/sudoers state=present regexp='^Defaults    secure_path' line='Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin'
+
 - name: phpenvのインストール
-- shell: curl -L https://raw.github.com/CHH/phpenv/master/bin/phpenv-install.sh | bash
+  shell: curl -L https://raw.github.com/CHH/phpenv/master/bin/phpenv-install.sh | bash
+  sudo: no
 
 - name: bashファイルの追記
-- lineinfile:
-    dest: "/root/.bashrc"
-    line: "PATH=$HOME/.phpenv/bin:$PATH # Add phpenv to PATH for scripting"
+  lineinfile:
+    dest: "~/.bashrc"
+    line: "export PATH=$HOME/.phpenv/bin:$PATH"
+  sudo: no
 
 - lineinfile:
-    dest: "/root/.bashrc"
+    dest: "~/.bashrc"
     line: eval "$(phpenv init -)"
+  sudo: no
 
-- shell: source /root/.bashrc
+- name: .bashrcを再読み込み
+  shell: source ~/.bashrc
+  sudo: no
+
+- name: pluginsディレクトリを作成
+  file: path=~/.phpenv/plugins state=directory
+  sudo: no
 
 - name: php-buildをプラグインとしてインストール
-- file: path=/root/.phpenv/plugins state=directory
-
-- command: git clone git://github.com/php-build/php-build.git chdir=/root/.phpenv/plugins
+  command: git clone git://github.com/php-build/php-build.git chdir=~/.phpenv/plugins
+  sudo: no
 
 - name: php依存パッケージをインストール
-- yum:
+  yum:
     name: "{{ item }}"
     state: installed
   with_items: 
@@ -35,13 +46,13 @@
    - libjpeg-devel
 
 - name: re2cはrpmforgeから
-- yum:
+  yum:
     name: re2c
     state: installed
     enablerepo: "rpmforge"
 
 - name: libmcryptはepelから
-- yum:
+  yum:
     name: "{{ item }}"
     state: installed
     enablerepo: "epel"
@@ -49,8 +60,12 @@
    - libmcrypt
    - libmcrypt-devel
 
-- name: PHPをインストール
-  command: phpenv install {{ php_version }}
+- command: printenv
+  sudo: no
+
+- name: php({{ php_version }})をインストールール
+  shell: phpenv install {{ php_version }}
+  sudo: no
 
 # shインストール
 # bashrc書き込み
