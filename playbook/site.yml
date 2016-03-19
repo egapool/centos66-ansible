@@ -17,3 +17,4 @@
         # - {servername: "local.egapool.com", documentroot: "/var/www/html/egapool/public"}
         # - {servername: "local.hogehoge.com", documentroot: "/var/www/html/hogehoge/public"}
     - role: git
+    - { role: "phpenv", php_versin: "5.6.19"}

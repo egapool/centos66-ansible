@@ -17,10 +17,6 @@
     line: eval "$(phpenv init -)"
   sudo: no
 
-- name: .bashrcを再読み込み
-  shell: source ~/.bashrc
-  sudo: no
-
 - name: pluginsディレクトリを作成
   file: path=~/.phpenv/plugins state=directory
   sudo: no
@@ -60,34 +56,32 @@
    - libmcrypt
    - libmcrypt-devel
 
-- command: printenv
+- name: "php({{ php_version }})をインストール"
+  shell: bash -lc "phpenv install {{ php_version }}" #"
   sudo: no
 
-- name: php({{ php_version }})をインストールール
-  shell: phpenv install {{ php_version }}
-  sudo: no
+- name: 起動スクリプトをサービスに移動
+  copy: src=/tmp/php-build/source/{{ php_version }}/sapi/fpm/init.d.php-fpm dest=/etc/init.d/php-fpm-{{ php_version }}
 
-# shインストール
-# bashrc書き込み
-# bisonインストール sudo yum install -y bison
+- name: パーミッション変更
+  file: path=/etc/init.d/php-fpm-{{ php_version }} mode=755
 
-# re2c インストール sudo yum -y install --enablerepo=rpmforge re2c
+- name: php-fpm.confを作成
+  copy: src=/home/vagrant/.phpenv/versions/{{ php_version }}/etc/php-fpm.conf.default dest=/home/vagrant/.phpenv/versions/{{ php_version }}/etc/php-fpm.conf
 
-# sudo yum install -y libxml2.x86_64 libxml2-devel.x86_64
-# yum install -y libjpeg libjpeg-devel 
-# yum install -y libpng libpng-devel
-# sudo yum -y install --enablerepo=epel libmcrypt-devel libmcrypt
-# sudo yum install -y readline-devel
-# sudo yum install -y libtidy-devel
-# sudo yum install -y libxslt-devel
+- name: timezoneをAsia/Tokyoに変更
+  lineinfile: dest=/home/vagrant/.phpenv/versions/{{ php_version }}/etc/php.ini state=present regexp='^;date.timezone' line='date.timezone=Asia/Tokyo'
 
-
-
-# yum install -y bison libxml2 libxml2-devel libxslt-devel libtidy-devel readline-devel libpng libpng-devel libjpeg libjpeg-devel 
+- name: "php-fpm-{{ php_version }}のchkconfigをONにする"
+  service:
+    name: "php-fpm-{{ php_version }}"
+    state: started
+    enabled: yes
 
 
-# yum install -y --enablerepo=epel php56-php-cli php56-php-fpm php56-php-pdo php56-php-mbstring php56-php-mysqlnd php56-php-mcrypt php56-php-gd php56-php-opcache php56-php-devel
 
 
-# yum -y install --enablerepo=epel libmcrypt-devel libmcrypt
-# yum install -y --enablerepo=remi-php56 php-cli php-fpm php-pdo php-mysqlnd php-mbstring php-gd php-mcrypt php-opcache php-devel
+
+
+
+
