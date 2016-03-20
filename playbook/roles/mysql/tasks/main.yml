@@ -1,0 +1,60 @@
+---
+- name: 既存のmysqlを削除
+  yum:
+    name: mysql*
+    state: absent
+
+- name: "MySQL(client,server,devel,shared-compat)をインストール"
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - "http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-client-{{mysql_version}}-1.el6.x86_64.rpm"
+    - "http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-server-{{mysql_version}}-1.el6.x86_64.rpm"
+    - "http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-devel-{{mysql_version}}-1.el6.x86_64.rpm"
+    - "http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-shared-compat-{{mysql_version}}-1.el6.x86_64.rpm"
+
+- name: MySQLをインストール(shared)
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - "http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-shared-{{mysql_version}}-1.el6.x86_64.rpm"
+
+- name: MySQL-pythonをインストール
+  yum:
+    name: "MySQL-python"
+    state: installed
+
+- name: /etc/my.cnfを設置
+  template:
+    src: "mycnf.j2"
+    dest: "/etc/my.cnf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: デフォルトのランダムパスワードを確認
+  shell: "sed -n '1p' /root/.mysql_secret | cut -f 18 -d ' '"
+  register: root_pswd
+
+- name: ~/.my.cnfを設置
+  template:
+    src: ".my.cnf.j2"
+    dest: "~/.my.cnf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: mysqlのchkconfigをONにする
+  service:
+    name: "mysql"
+    state: "started"
+    enabled: yes
+
+- name: setup mysql root
+  command: mysqladmin -u root password {{ root_pswd.stdout }}
+
+- name: rootのパスワードを変更
+  mysql_user: name=root password={{mysql_root_pswd}}
+  

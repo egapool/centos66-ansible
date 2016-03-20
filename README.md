@@ -18,11 +18,10 @@ Vagrant1.8から使える`ansible_localプロビジョナ`を使用して、ゲ�
 ## 構成
 
 + apache2.4
-+ phpenv??
-+ php-fpm??
++ phpenv
++ php-fpm
 + xdebug??
-+ rbenv??
-+ mysql??
++ mysql5.6.22
 + nodejs??
 + python??
-+ git??
++ git2.7.2
