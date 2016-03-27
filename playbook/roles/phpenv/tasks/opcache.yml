@@ -1,0 +1,8 @@
+---
+- name: opcache.iniを作成
+  template:
+    src: "opcache.ini.j2"
+    dest: "/home/vagrant/.phpenv/versions/{{ php_version }}/etc/conf.d/opcache.ini"
+    owner: vagrant
+    group: vagrant
+    mode: 0644

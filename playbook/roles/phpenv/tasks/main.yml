@@ -29,16 +29,16 @@
   yum:
     name: "{{ item }}"
     state: installed
-  with_items: 
-   - bison 
-   - libxml2 
-   - libxml2-devel 
-   - libxslt-devel 
-   - libtidy-devel 
-   - readline-devel 
-   - libpng 
-   - libpng-devel 
-   - libjpeg 
+  with_items:
+   - bison
+   - libxml2
+   - libxml2-devel
+   - libxslt-devel
+   - libtidy-devel
+   - readline-devel
+   - libpng
+   - libpng-devel
+   - libjpeg
    - libjpeg-devel
 
 - name: re2cはrpmforgeから
@@ -52,7 +52,7 @@
     name: "{{ item }}"
     state: installed
     enablerepo: "epel"
-  with_items: 
+  with_items:
    - libmcrypt
    - libmcrypt-devel
 
@@ -71,6 +71,9 @@
 
 - name: timezoneをAsia/Tokyoに変更
   lineinfile: dest=/home/vagrant/.phpenv/versions/{{ php_version }}/etc/php.ini state=present regexp='^;date.timezone' line='date.timezone=Asia/Tokyo'
+
+- include: opcache.yml
+  when: php_enable_opcache_configure
 
 - name: "php-fpm-{{ php_version }}のchkconfigをONにする"
   service:
