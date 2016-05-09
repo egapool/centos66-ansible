@@ -35,7 +35,7 @@
     mode: 0644
 
 - name: デフォルトのランダムパスワードを確認
-  shell: "sed -n '1p' /root/.mysql_secret | cut -f 18 -d ' '"
+  shell: "sed -n '1p' /root/.mysql_secret | cut -f 19 -d ' '"
   register: root_pswd
 
 - name: ~/.my.cnfを設置
@@ -57,4 +57,3 @@
 
 - name: rootのパスワードを変更
   mysql_user: name=root password={{mysql_root_pswd}}
-  

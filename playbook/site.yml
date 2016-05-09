@@ -2,20 +2,15 @@
 - hosts: localhost
   connection: local
   become: yes
-  pre_tasks:
-    - name: Install libselinux-python
-      yum: name=libselinux-python state=present
 
-    - name: Permissive selinux
-      selinux: policy=targeted state=permissive
-
-  roles: 
+  roles:
+    - role: common
     - role: repositries
     - role: apache
-      apache_vhosts_ssl:
+      apache_vhosts:
         - {servername: "local.example.com", documentroot: "/var/www/html/example/public"}
-        # - {servername: "local.egapool.com", documentroot: "/var/www/html/egapool/public"}
-        # - {servername: "local.hogehoge.com", documentroot: "/var/www/html/hogehoge/public"}
+      apache_vhosts_ssl:
+        - {servername: "local.sslexample.com", documentroot: "/var/www/html/sslexample/public"}
     - role: git
     - { role: "phpenv", php_versin: "5.6.19"}
     - { role: "mysql", mysql_versin: "5.6.22"}
