@@ -22,6 +22,4 @@ Vagrant1.8から使える`ansible_localプロビジョナ`を使用して、ゲ�
 + php-fpm
 + xdebug??
 + mysql5.6.22
-+ nodejs??
-+ python??
 + git2.7.2
