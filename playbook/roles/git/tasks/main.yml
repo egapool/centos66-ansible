@@ -3,7 +3,7 @@
   yum:
     name: "{{ item }}"
     state: installed
-  with_items: git_dependencies
+  with_items: '{{git_dependencies}}'
 
 - name: gitのソースをダウンロード
   get_url: url="https://www.kernel.org/pub/software/scm/git/git-{{git_version}}.tar.gz" dest="{{git_download_dir}}/git-{{git_version}}.tar.gz"

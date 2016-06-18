@@ -3,22 +3,22 @@
 
 - name: generate each servername's directory for ssl files
   file: "path={{apache_ssl_path}}/{{item.servername}} state=directory"
-  with_items: apache_vhosts_ssl
+  with_items: '{{apache_vhosts_ssl}}'
 
 - name: generate server.key
   command: "openssl genrsa -out {{apache_ssl_path}}/{{item.servername}}/server.key 2048"
   args:
     creates: "{{apache_ssl_path}}/{{item.servername}}/server.key"
-  with_items: apache_vhosts_ssl
+  with_items: '{{apache_vhosts_ssl}}'
 
 - name: generate csr
   command: "openssl req -new -key {{apache_ssl_path}}/{{item.servername}}/server.key -out {{apache_ssl_path}}/{{item.servername}}/server.csr -subj '/C=JP/ST=Tokyo/L=Tokyo/O=Example Ltd./OU=Web/CN={{item.servername}}'"
   args:
     creates: "{{apache_ssl_path}}/{{item.servername}}/server.csr"
-  with_items: apache_vhosts_ssl
+  with_items: '{{apache_vhosts_ssl}}'
 
 - name: generate crt
   command: "openssl x509 -in {{apache_ssl_path}}/{{item.servername}}/server.csr -days 3650 -req -signkey {{apache_ssl_path}}/{{item.servername}}/server.key -out {{apache_ssl_path}}/{{item.servername}}/server.crt"
   args:
     creates: "{{apache_ssl_path}}/{{item.servername}}/server.crt"
-  with_items: apache_vhosts_ssl
+  with_items: '{{apache_vhosts_ssl}}'

@@ -5,7 +5,7 @@
     name: "{{ item }}"
     state: installed
     enablerepo: "{{ apache_enablerepo }}"
-  with_items: apache_packages
+  with_items: '{{apache_packages}}'
 
 - name: /opt/rh/httpd24/root/etc/httpd に/etc/httpd/のシンボリックリンクを貼る
   file: src=/opt/rh/httpd24/root/etc/httpd dest=/etc/httpd state=link
