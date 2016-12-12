@@ -29,7 +29,7 @@
 - name: Check whether certificates defined in vhosts exist.
   stat: "path={{apache_ssl_path}}/{{item.servername}}/server.crt"
   register: apache_ssl_certificates
-  with_items: apache_vhosts_ssl
+  with_items: "{{apache_vhosts_ssl}}"
 
 - name: vhostを設置
   template:

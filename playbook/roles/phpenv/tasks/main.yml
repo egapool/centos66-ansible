@@ -41,18 +41,13 @@
    - libjpeg
    - libjpeg-devel
 
-- name: re2cはrpmforgeから
-  yum:
-    name: re2c
-    state: installed
-    enablerepo: "rpmforge"
-
 - name: libmcryptはepelから
   yum:
     name: "{{ item }}"
     state: installed
     enablerepo: "epel"
   with_items:
+   - re2c
    - libmcrypt
    - libmcrypt-devel
 
