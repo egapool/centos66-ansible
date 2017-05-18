@@ -40,6 +40,7 @@
    - libpng-devel
    - libjpeg
    - libjpeg-devel
+   - bzip2-devel
 
 - name: libmcryptはepelから
   yum:
